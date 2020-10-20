@@ -102,27 +102,44 @@ function yd_wpmuso_reset( $force ) {
 	/** Init values **/
 	$yd_wpmuso_version		= "4.0.0";
 	$newoption				= 'widget_yd_wpmuso';
-	$newvalue				= '';
+	$newvalue				= array();
 	$prev_options = get_option( $newoption );
 	if( ( isset( $force ) && $force ) || !isset( $prev_options['plugin_version'] ) ) {
 		// those default options are set-up at plugin first-install or manual reset only
 		// they will not be changed when the plugin is just upgraded or deactivated/reactivated
 		$newvalue['plugin_version'] 	= $yd_wpmuso_version;
-		$newvalue[0]['debug'] 			= 0;
-		$newvalue[0]['selected_options']= 0;
-		$newvalue[0]['disable_backlink']= 0;
-		$newvalue[0]['autospreading']	= 1;
-		$newvalue[0]['auto_new_blog']	= 1;
-		$newvalue[0]['over_write']		= 1;
-		$newvalue[0]['flush_rewrites']	= 0;
-		$newvalue[0]['master_blog_id']	= 1;
-		$newvalue[0]['only_public']		= 0; 
-    	$newvalue[0]['skip_archived']	= 0; 
-    	$newvalue[0]['skip_mature']		= 0; 
-    	$newvalue[0]['skip_spam']		= 0; 
-    	$newvalue[0]['skip_deleted']	= 0; 
-		$newvalue[0]['to_skip']			= '';
-		$newvalue[0]['overwrite_data']	= 0;
+		$newvalue[] = array(
+		  'debug'=>0,
+		  'selected_options'=>0,
+		  'disable_backlink'=>0,
+		  'autospreading'=>1,
+		  'auto_new_blog'=>1,
+		  'over_write'=>1,
+		  'flush_rewrites'=>0,
+		  'master_blog_id'=>1,
+		  'only_public'=>0,
+		  'skip_archived'=>0,
+		  'skip_mature'=>0,
+		  'skip_spam'=>0,
+		  'skip_deleted'=>0,
+		  'to_skip'=>'',
+		  'overwrite_data'=>0
+		);
+//		$newvalue[0]['debug'] 			= 0;
+//		$newvalue[0]['selected_options']= 0;
+//		$newvalue[0]['disable_backlink']= 0;
+//		$newvalue[0]['autospreading']	= 1;
+//		$newvalue[0]['auto_new_blog']	= 1;
+//		$newvalue[0]['over_write']		= 1;
+//		$newvalue[0]['flush_rewrites']	= 0;
+//		$newvalue[0]['master_blog_id']	= 1;
+//		$newvalue[0]['only_public']		= 0; 
+//    	$newvalue[0]['skip_archived']	= 0; 
+//    	$newvalue[0]['skip_mature']		= 0; 
+//    	$newvalue[0]['skip_spam']		= 0; 
+//    	$newvalue[0]['skip_deleted']	= 0; 
+//		$newvalue[0]['to_skip']			= '';
+//		$newvalue[0]['overwrite_data']	= 0;
 		if( $prev_options ) {
 			update_option( $newoption, $newvalue );
 		} else {
@@ -147,13 +164,12 @@ function yd_wpmuso_textdomain() {
 add_action('admin_menu', 'yd_wpmuso_menu');
 function yd_wpmuso_menu() {
 	add_options_page(
-	__('YD Network-wide Options',
-		'yd-wpmuso'), 
-	__('YD Network-wide Options', 'yd-wpmuso'),
-	8,
-	__FILE__,
+		__('YD Network-wide Options','yd-wpmuso'), 
+		__('YD Network-wide Options','yd-wpmuso'),
+		'manage_options',
+		__FILE__,
 		'yd_wpmuso_options'
-		);
+	);
 }
 function yd_wpmuso_options() {
 	global $wpdb;
@@ -663,14 +679,14 @@ add_filter( 'plugin_row_meta', 'yd_wpmuso_links' , 10, 2 );
 function yd_wpmuso_links( $links, $file ) {
 	$base = plugin_basename(__FILE__);
 	if ( $file == $base ) {
-		$links[] = '<a href="options-general.php?page=yd-wpmu-sitewide-options%2F' . basename( __FILE__ ) . '">' . __('Settings') . '</a>';
+		$links[] = '<a href="options-general.php?page=yd-network-wide-options%2F' . basename( __FILE__ ) . '">' . __('Settings') . '</a>';
 		$links[] = '<a href="http://www.yann.com/en/wp-plugins/yd-wpmu-sitewide-options">' . __('Support') . '</a>';
 	}
 	return $links;
 }
 
 function yd_wpmuso_action_links( $links ) {
-	$settings_link = '<a href="options-general.php?page=yd-wpmu-sitewide-options%2F' . basename( __FILE__ ) . '">' . __('Settings') . '</a>';
+	$settings_link = '<a href="options-general.php?page=yd-network-wide-options%2F' . basename( __FILE__ ) . '">' . __('Settings') . '</a>';
 	array_unshift( $links, $settings_link );
 	return $links;
 }
